@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using crediarioW.Services;
+
+Console.WriteLine("Servidor iniciando.");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,9 @@ builder.Services.AddAuthorization(options =>
 });
 builder.Services.AddRazorPages();
 
+// Services
+builder.Services.AddScoped<VendaService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,12 +36,11 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapStaticAssets();
+//app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+    //.WithStaticAssets();
 
 app.Run();
