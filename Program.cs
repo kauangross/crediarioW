@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.EntityFrameworkCore;
+using crediarioW.Repository;
 using crediarioW.Services;
 
 Console.WriteLine("Servidor iniciando.");
@@ -18,8 +20,17 @@ builder.Services.AddAuthorization(options =>
 });
 builder.Services.AddRazorPages();
 
+// BD connection
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+// appsettings.json
+);
+
 // Services
 builder.Services.AddScoped<VendaService>();
+builder.Services.AddScoped<ClientService>();
 
 var app = builder.Build();
 
@@ -41,6 +52,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-    //.WithStaticAssets();
+//.WithStaticAssets();
 
+// Run the app
 app.Run();
