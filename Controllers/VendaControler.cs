@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using crediarioW.Services;
+using crediarioW.Models;
 
 namespace crediarioW.Controllers;
 
@@ -16,21 +17,15 @@ public class VendaController : ControllerBase
 
     // GET /vendas/teste
     [HttpGet("teste")]
-    public IActionResult Teste()
+    public async IAsyncEnumerable<Venda> Teste()
     {
-        var venda = _vendaService.LancarVenda(
+        var venda = await _vendaService.LancarVenda(
             Guid.NewGuid(),
             1200m,
             1,
             "CartaoCredito"
         );
 
-        return Ok(new
-        {
-            venda.Id,
-            venda.DataVenda,
-            venda.ValorTotal,
-            venda.Pagamento
-        });
+        yield return venda;
     }
 }

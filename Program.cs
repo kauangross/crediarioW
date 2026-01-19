@@ -31,6 +31,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Services
 builder.Services.AddScoped<VendaService>();
 builder.Services.AddScoped<ClientService>();
+builder.Services.AddScoped<VendaRepository>();
 
 var app = builder.Build();
 
@@ -53,6 +54,12 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 //.WithStaticAssets();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
+}
 
 // Run the app
 app.Run();
