@@ -1,11 +1,20 @@
 ﻿namespace crediarioW.Services;
 
 using System;
+using System.Threading.Tasks;
 using crediarioW.Models;
+using crediarioW.Repository;
 
 public class VendaService
 {
-    public Venda LancarVenda(
+    private readonly VendaRepository _vendaRepository;
+
+    public VendaService(VendaRepository repository)
+    {
+        _vendaRepository = repository;
+    }
+
+    public async Task<Venda> LancarVenda(
         Guid clienteId, 
         decimal valorTotal, 
         int quantidadeParcelas, 
@@ -19,8 +28,14 @@ public class VendaService
             throw new ArgumentException("Forma de pagamento inválida.", nameof(pagamento));
 
         Venda venda = new Venda(clienteId, valorTotal, formaPagamento);
+        await _vendaRepository.AddAsync(venda);
 
         return venda;
+    }
+
+    public async Task<Venda> GetVendaById(Guid Id)
+    {
+        return await _vendaRepository.GetByIdAsync(Id);
     }
 }
 
