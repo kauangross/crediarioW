@@ -9,3 +9,6 @@ obj/
 *.user
 *.suo
 *.cache
+
+appsettings.json
+appsettings.Development.json
