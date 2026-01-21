@@ -5,7 +5,7 @@ using System;
 public class Client
 {
 	public Guid Id { get; private set; }
-	public string ClientName { get; private set; }
+	public string? ClientName { get; private set; }
 	public string? Cpf { get; private set; }
 	public string? Phone { get; private set; }
 	public string? Adress { get; private set; }

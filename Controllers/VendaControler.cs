@@ -17,7 +17,7 @@ public class VendaController : ControllerBase
 
     // GET /vendas/teste
     [HttpGet("teste")]
-    public async IAsyncEnumerable<Venda> Teste()
+    public async Task<IActionResult> Teste()
     {
         var venda = await _vendaService.LancarVenda(
             Guid.NewGuid(),
@@ -26,6 +26,14 @@ public class VendaController : ControllerBase
             "CartaoCredito"
         );
 
-        yield return venda;
+        return Ok(venda);
+    }
+
+    // GET /vendas/{id}
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        Venda venda = await _vendaService.GetVendaById(id);
+        return Ok(venda);
     }
 }

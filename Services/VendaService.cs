@@ -32,5 +32,10 @@ public class VendaService
 
         return venda;
     }
+
+    public async Task<Venda> GetVendaById(Guid Id)
+    {
+        return await _vendaRepository.GetByIdAsync(Id);
+    }
 }
 

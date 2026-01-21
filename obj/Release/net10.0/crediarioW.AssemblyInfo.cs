@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("crediarioW")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1a1136aa5d23f7afd74984fef047e7b16382990b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+807bdff7ce33838d84af65eddf0e4e26405d2ca3")]
 [assembly: System.Reflection.AssemblyProductAttribute("crediarioW")]
 [assembly: System.Reflection.AssemblyTitleAttribute("crediarioW")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
