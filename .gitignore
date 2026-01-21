@@ -10,5 +10,6 @@ obj/
 *.suo
 *.cache
 
+# User secrets / env
 appsettings.json
 appsettings.Development.json
