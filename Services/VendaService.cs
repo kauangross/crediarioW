@@ -3,6 +3,7 @@
 using System;
 using System.Threading.Tasks;
 using crediarioW.Models;
+using crediarioW.Dtos;
 using crediarioW.Repository;
 
 public class VendaService
@@ -14,23 +15,17 @@ public class VendaService
         _vendaRepository = repository;
     }
 
-    public async Task<Venda> LancarVenda(
-        Guid clienteId, 
-        decimal valorTotal, 
-        int quantidadeParcelas, 
-        string pagamento)
+    public async Task<VendaResponseDto> LancarVenda(
+        vendaRequestDto vendaRequestDto)
     {
 
-        if(valorTotal <= 0)
-            throw new ArgumentException("Para lançar uma venda, o valor total deve ser maior que zero.", nameof(valorTotal));
+        if(vendaRequestDto.ValorTotal <= 0)
+            throw new ArgumentException("Para lançar uma venda, o valor total deve ser maior que zero.", nameof(vendaRequestDto.ValorTotal));
 
-        if (!Enum.TryParse<FormaPagamento>(pagamento, true, out var formaPagamento))
-            throw new ArgumentException("Forma de pagamento inválida.", nameof(pagamento));
-
-        Venda venda = new Venda(clienteId, valorTotal, formaPagamento);
+        var venda = new Venda(vendaRequestDto.ClienteId, vendaRequestDto.ValorTotal, vendaRequestDto.Pagamento);
         await _vendaRepository.AddAsync(venda);
 
-        return venda;
+        return new VendaResponseDto(venda.Id, venda.ClienteId, venda.ValorTotal, venda.Pagamento);
     }
 
     public async Task<Venda> GetVendaById(Guid Id)
@@ -38,4 +33,3 @@ public class VendaService
         return await _vendaRepository.GetByIdAsync(Id);
     }
 }
-

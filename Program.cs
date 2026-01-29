@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 using crediarioW.Repository;
 using crediarioW.Services;
 
@@ -7,31 +8,39 @@ Console.WriteLine("Servidor iniciando.");
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
+// Auth
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
    .AddNegotiate();
 
+
+/* Pede autorização para toda requisição
 builder.Services.AddAuthorization(options =>
 {
     // By default, all incoming requests will be authorized according to the default policy.
     options.FallbackPolicy = options.DefaultPolicy;
-});
-builder.Services.AddRazorPages();
+}); 
+ */
 
-// BD connection
+// DB connection
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
-// appsettings.json
+    // appsettings.json
 );
 
-// Services
+// Dependency Injection
 builder.Services.AddScoped<VendaService>();
 builder.Services.AddScoped<ClientService>();
 builder.Services.AddScoped<VendaRepository>();
+builder.Services.AddScoped<ClientRepository>();
+
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -43,10 +52,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 //app.MapStaticAssets();
 
@@ -55,6 +68,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 //.WithStaticAssets();
 
+// Migrações automáticas
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using crediarioW.Repository;
@@ -11,9 +12,11 @@ using crediarioW.Repository;
 namespace crediarioW.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260123212914_AddPagamentoToVenda")]
+    partial class AddPagamentoToVenda
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,17 +79,12 @@ namespace crediarioW.Migrations
             modelBuilder.Entity("crediarioW.Models.Venda", b =>
                 {
                     b.HasOne("crediarioW.Models.Client", "Cliente")
-                        .WithMany("Vendas")
+                        .WithMany()
                         .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Cliente");
-                });
-
-            modelBuilder.Entity("crediarioW.Models.Client", b =>
-                {
-                    b.Navigation("Vendas");
                 });
 #pragma warning restore 612, 618
         }
