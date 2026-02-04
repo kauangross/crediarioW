@@ -9,23 +9,32 @@ using crediarioW.Repository;
 public class VendaService
 {
     private readonly VendaRepository _vendaRepository;
+    private readonly ClientRepository _clientRepository;
 
-    public VendaService(VendaRepository repository)
+    public VendaService(VendaRepository repository, ClientRepository clientRepository)
     {
         _vendaRepository = repository;
+        _clientRepository = clientRepository;
     }
 
-    public async Task<VendaResponseDto> LancarVenda(
-        vendaRequestDto vendaRequestDto)
+    public async Task<Venda> LancarVenda(
+        VendaRequestDto vendaRequestDto)
     {
-
-        if(vendaRequestDto.ValorTotal <= 0)
-            throw new ArgumentException("Para lançar uma venda, o valor total deve ser maior que zero.", nameof(vendaRequestDto.ValorTotal));
-
         var venda = new Venda(vendaRequestDto.ClienteId, vendaRequestDto.ValorTotal, vendaRequestDto.Pagamento);
+
+        if(vendaRequestDto.ClienteId == Guid.Empty) // Precisa validar se cliente existe no banco
+        {
+            throw new ArgumentException("ClienteId inválido.");
+        } 
+
+        if(!(await _clientRepository.ClientExists(vendaRequestDto.ClienteId)))
+        {
+            throw new ArgumentException("Cliente não encontrado.");
+        }
+
         await _vendaRepository.AddAsync(venda);
 
-        return new VendaResponseDto(venda.Id, venda.ClienteId, venda.ValorTotal, venda.Pagamento);
+        return venda;
     }
 
     public async Task<Venda> GetVendaById(Guid Id)

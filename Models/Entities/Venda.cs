@@ -1,17 +1,23 @@
 ﻿namespace crediarioW.Models;
 
 using System;
+using System.ComponentModel.DataAnnotations;
 
 public class Venda
 {
+	[Required]
     public Guid Id { get; private set; }
+    [Required]
     public Guid ClienteId { get; private set; }
-	public Client Cliente { get; private set;  }
-    
-	public decimal ValorTotal { get; private set; }
-	public DateTime DataVenda { get; private set; }
-	public FormaPagamento Pagamento { get; private set; }
+    [Required]
+	public Client Cliente { get; private set;  } // Preciso? Se sim, preciso no dto?
 
+    [Required]
+    public decimal ValorTotal { get; private set; }
+    [Required]
+    public DateTime DataVenda { get; private set; }
+    [Required]
+    public FormaPagamento Pagamento { get; private set; }
 
 	public Venda() {}
 

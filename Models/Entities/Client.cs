@@ -1,9 +1,11 @@
 ﻿namespace crediarioW.Models;
 
 using System;
+using System.ComponentModel.DataAnnotations;
 
 public class Client
 {
+	[Required]
 	public Guid Id { get; private set; }
 	public string? ClientName { get; private set; }
 	public string? Cpf { get; private set; }

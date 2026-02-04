@@ -1,6 +1,7 @@
-﻿using crediarioW.Models;
+﻿namespace crediarioW.Repository;
 
-namespace crediarioW.Repository;
+using crediarioW.Models;
+using Microsoft.EntityFrameworkCore;
 
 public class ClientRepository
 {
@@ -15,5 +16,20 @@ public class ClientRepository
     {
         _context.Clients.Add(client);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<Client> GetByIdAsync(Guid id)
+    {
+        var client = await _context.Clients.FindAsync(id);
+        if (client == null)
+        {
+            throw new KeyNotFoundException("Client not found.");
+        }
+        return client;
+    }
+
+    public async Task<bool> ClientExists(Guid id)
+    {
+        return await _context.Clients.AnyAsync(c => c.Id == id);
     }
 }

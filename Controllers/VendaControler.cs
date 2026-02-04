@@ -16,19 +16,12 @@ public class VendaController : ControllerBase
         _vendaService = vendaService;
     }
 
-    // GET /vendas/teste
-    [HttpGet("teste")]
-    public async Task<IActionResult> Teste()
+    [HttpPost]
+    public async Task<IActionResult> CreateVenda([FromBody] VendaRequestDto vendaRequestDto)
     {
-       var vendaDto = new vendaRequestDto(
-            Guid.NewGuid(), // Id de cliente existente
-            1500m,
-            FormaPagamento.Dinheiro
-        );
-        
-        VendaResponseDto vendaResponseDto = await _vendaService.LancarVenda(vendaDto);
+        Venda venda = await _vendaService.LancarVenda(vendaRequestDto);
 
-        return Ok(vendaResponseDto);
+        return Ok(new VendaResponseDto(venda.Id, venda.ClienteId, venda.ValorTotal, venda.Pagamento));
     }
 
     // GET /vendas/{id}
