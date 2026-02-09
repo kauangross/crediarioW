@@ -16,9 +16,19 @@ public class ClientController : ControllerBase
         _clientService = clientService;
     }
 
-    [HttpPost("criar")]
-    public async Task<IActionResult> CriarClient([FromForm] ClientRequestDto clientRequest)
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] ClientRequestDto clientRequestDto)
     {
-        return Ok(await _clientService.CreateClient(clientRequest));
+        var result = await _clientService.CreateAsync(clientRequestDto);
+        return Ok(result);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] ClientUpdateDto updateRequestDto)
+    {
+        var result = await _clientService.UpdateAsync(id, updateRequestDto);
+
+        if (result == null) return NotFound();
+        return Ok(result);
     }
 }

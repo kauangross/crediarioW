@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
 using crediarioW.Repository;
 using crediarioW.Services;
 
@@ -14,7 +13,6 @@ builder.Services.AddRazorPages();
 // Auth
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
    .AddNegotiate();
-
 
 /* Pede autorização para toda requisição
 builder.Services.AddAuthorization(options =>
@@ -33,9 +31,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 // Dependency Injection
-builder.Services.AddScoped<VendaService>();
+builder.Services.AddScoped<SaleService>();
 builder.Services.AddScoped<ClientService>();
-builder.Services.AddScoped<VendaRepository>();
+builder.Services.AddScoped<SaleRepository>();
 builder.Services.AddScoped<ClientRepository>();
 
 // Swagger

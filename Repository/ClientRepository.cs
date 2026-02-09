@@ -1,6 +1,7 @@
 ﻿namespace crediarioW.Repository;
 
-using crediarioW.Models;
+using crediarioW.Dtos;
+using crediarioW.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 public class ClientRepository
@@ -16,6 +17,18 @@ public class ClientRepository
     {
         _context.Clients.Add(client);
         await _context.SaveChangesAsync();
+    }
+    public async Task<Client> UpdateAsync(Guid id, ClientUpdateDto dto)
+    {
+        var cliente = await _context.Clients.FindAsync(id);
+
+        if (cliente == null) throw new ArgumentNullException("Client não encontrado");
+
+        cliente.UpdateData(dto.NewClientName, dto.NewCpf, dto.NewPhone, dto.NewAddress);
+
+        await _context.SaveChangesAsync();
+
+        return cliente;
     }
 
     public async Task<Client> GetByIdAsync(Guid id)

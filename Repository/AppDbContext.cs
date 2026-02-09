@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using crediarioW.Models;
+using crediarioW.Models.Entities;
 
 namespace crediarioW.Repository;
 
 public class AppDbContext : DbContext
 {
-    public DbSet<Venda> Vendas => Set<Venda>();
+    public DbSet<Sale> Sales => Set<Sale>();
     public DbSet<Client> Clients => Set<Client>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
@@ -26,22 +26,22 @@ public class AppDbContext : DbContext
                   .IsRequired()
                   .HasMaxLength(150);
 
-            entity.HasMany(c => c.Vendas)
-                  .WithOne(v => v.Cliente)
-                  .HasForeignKey(v => v.ClienteId);
+            entity.HasMany(c => c.Sales)
+                  .WithOne(s => s.Client)
+                  .HasForeignKey(s => s.ClientId);
         });
 
-        // Venda
-        modelBuilder.Entity<Venda>(entity =>
+        // Sale
+        modelBuilder.Entity<Sale>(entity =>
         {
-            entity.HasKey(v => v.Id);
+            entity.HasKey(s => s.Id);
 
-            entity.Property(v => v.ValorTotal)
+            entity.Property(s => s.TotalAmount)
                   .HasPrecision(18, 2);
 
-            entity.HasOne(v => v.Cliente)
-                  .WithMany(c => c.Vendas)
-                  .HasForeignKey(v => v.ClienteId)
+            entity.HasOne(s => s.Client)
+                  .WithMany(c => c.Sales)
+                  .HasForeignKey(s => s.ClientId)
                   .OnDelete(DeleteBehavior.Restrict);
         });
     }

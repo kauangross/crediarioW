@@ -12,8 +12,8 @@ using crediarioW.Repository;
 namespace crediarioW.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260123234742_RelationsClientVendas")]
-    partial class RelationsClientVendas
+    [Migration("20260209191947_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,13 +25,13 @@ namespace crediarioW.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("crediarioW.Models.Client", b =>
+            modelBuilder.Entity("crediarioW.Models.Entities.Client", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Adress")
+                    b.Property<string>("Address")
                         .HasColumnType("text");
 
                     b.Property<string>("ClientName")
@@ -50,46 +50,46 @@ namespace crediarioW.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("crediarioW.Models.Venda", b =>
+            modelBuilder.Entity("crediarioW.Models.Entities.Sale", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ClienteId")
+                    b.Property<Guid>("ClientId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("DataVenda")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Pagamento")
+                    b.Property<int>("PaymentMethod")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("ValorTotal")
+                    b.Property<DateTime>("SaleDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("TotalAmount")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClienteId");
+                    b.HasIndex("ClientId");
 
-                    b.ToTable("Vendas");
+                    b.ToTable("Sales");
                 });
 
-            modelBuilder.Entity("crediarioW.Models.Venda", b =>
+            modelBuilder.Entity("crediarioW.Models.Entities.Sale", b =>
                 {
-                    b.HasOne("crediarioW.Models.Client", "Cliente")
-                        .WithMany("Vendas")
-                        .HasForeignKey("ClienteId")
+                    b.HasOne("crediarioW.Models.Entities.Client", "Client")
+                        .WithMany("Sales")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Cliente");
+                    b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("crediarioW.Models.Client", b =>
+            modelBuilder.Entity("crediarioW.Models.Entities.Client", b =>
                 {
-                    b.Navigation("Vendas");
+                    b.Navigation("Sales");
                 });
 #pragma warning restore 612, 618
         }

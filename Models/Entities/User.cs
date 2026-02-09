@@ -1,4 +1,4 @@
-﻿namespace crediarioW.Models;
+﻿namespace crediarioW.Models.Entities;
 
 using System;
 

@@ -1,11 +1,10 @@
 namespace crediarioW.Services;
 
-using System;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using crediarioW.Models;
 using crediarioW.Dtos;
+using crediarioW.Models.Entities;
 using crediarioW.Repository;
+using System;
+using System.Threading.Tasks;
 
 public class ClientService
 {
@@ -15,10 +14,22 @@ public class ClientService
         _clientRepository = clientRepository;
     }
 
-    public async Task<ClientResponseDto> CreateClient(ClientRequestDto clientRequest)
+    public async Task<ClientResponseDto> CreateAsync(ClientRequestDto clientRequest)
     {
         if(clientRequest.ClientName != null && clientRequest.ClientName.Length < 3)
-            throw new ArgumentException("O nome do cliente deve ter pelo menos 3 caracteres.", nameof(clientRequest.ClientName));
+        { 
+            throw new ArgumentException("O nome do cliente deve ter pelo menos 3 caracteres.", 
+                nameof(clientRequest.ClientName));
+        } else if (clientRequest.Cpf != null && clientRequest.Cpf.Length != 11)
+        {
+            throw new ArgumentException("O CPF deve conter exatamente 11 caracteres.",
+                nameof(clientRequest.Cpf));
+        }
+        else if (clientRequest.Phone != null && clientRequest.Phone.Length < 10)
+        {
+            throw new ArgumentException("O telefone deve conter pelo menos 10 caracteres.",
+                nameof(clientRequest.Phone));
+        }
 
         Client client = new Client(clientRequest.ClientName, 
             clientRequest.Cpf, 
@@ -27,6 +38,35 @@ public class ClientService
 
         await _clientRepository.AddAsync(client);
 
-        return new ClientResponseDto(client.Id, client.ClientName, client.Cpf, client.Phone, client.Adress);
+        return new ClientResponseDto(client.Id, 
+            client.ClientName, 
+            client.Cpf, 
+            client.Phone, 
+            client.Address);
+    }
+
+    public async Task<ClientResponseDto> UpdateAsync(Guid id, ClientUpdateDto clientUpdateDto)
+    {
+        if(!(await _clientRepository.ClientExists(id)))
+            throw new ArgumentException("Cliente não encontrado.");
+
+        if (clientUpdateDto.NewClientName != null && clientUpdateDto.NewClientName.Length < 3) { 
+            throw new ArgumentException("O nome do cliente deve ter pelo menos 3 caracteres.", 
+                clientUpdateDto.NewClientName);
+        } else if (clientUpdateDto.NewCpf != null && clientUpdateDto.NewCpf.Length != 11) {
+            throw new ArgumentException("O CPF deve conter exatamente 11 caracteres.", 
+                clientUpdateDto.NewCpf);
+        } else if (clientUpdateDto.NewPhone != null && clientUpdateDto.NewPhone.Length < 10) {
+            throw new ArgumentException("O telefone deve conter pelo menos 10 caracteres.", 
+                nameof(clientUpdateDto.NewPhone));
+        }
+
+        Client client = await _clientRepository.UpdateAsync(id, clientUpdateDto);
+
+        return new ClientResponseDto(client.Id,
+            client.ClientName,
+            client.Cpf,
+            client.Phone,
+            client.Address);
     }
 }
