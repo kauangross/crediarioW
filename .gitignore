@@ -13,3 +13,6 @@ obj/
 # User secrets / env
 appsettings.json
 appsettings.Development.json
+
+# Data
+Migrations
