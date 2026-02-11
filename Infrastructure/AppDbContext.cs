@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using crediarioW.Models.Entities;
 
-namespace crediarioW.Repository;
+namespace crediarioW.Infrastructure;
 
 public class AppDbContext : DbContext
 {

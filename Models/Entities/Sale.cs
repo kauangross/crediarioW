@@ -12,8 +12,7 @@ public class Sale
     [Required]
     public Guid ClientId { get; private set; }
 
-    [Required]
-    public Client Client { get; private set; }
+    public Client? Client { get; private set; }
 
     [Required]
     public decimal TotalAmount { get; private set; }

@@ -4,6 +4,8 @@ using crediarioW.Dtos;
 using crediarioW.Models.Entities;
 using crediarioW.Repository;
 using System;
+using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 
 public class ClientService
@@ -31,7 +33,7 @@ public class ClientService
                 nameof(clientRequest.Phone));
         }
 
-        Client client = new Client(clientRequest.ClientName, 
+        var client = new Client(clientRequest.ClientName, 
             clientRequest.Cpf, 
             clientRequest.Phone, 
             clientRequest.Address);
@@ -68,5 +70,31 @@ public class ClientService
             client.Cpf,
             client.Phone,
             client.Address);
+    }
+
+    public async Task<ClientResponseDto?> GetByIdAsync(Guid id)
+    {
+        Client? client = await _clientRepository.GetByIdAsync(id);
+
+        if (client == null) return null;
+        
+        return new ClientResponseDto(client.Id,
+            client.ClientName,
+            client.Cpf,
+            client.Phone,
+            client.Address);
+    }
+
+    public async Task<List<ClientResponseDto>> GetAllAsync()
+    {
+        var clientList = await _clientRepository.GetAllAsync();
+
+        return clientList.Select(client => new ClientResponseDto(
+            client.Id,
+            client.ClientName,
+            client.Cpf,
+            client.Phone,
+            client.Address
+        )).ToList();
     }
 }

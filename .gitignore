@@ -15,4 +15,4 @@ appsettings.json
 appsettings.Development.json
 
 # Data
-Migrations
+Infrastructure/Migrations

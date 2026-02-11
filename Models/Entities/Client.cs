@@ -7,17 +7,20 @@ public class Client
 {
 	[Required]
 	public Guid Id { get; private set; }
-	public string? ClientName { get; private set; }
+    public string ClientName { get; private set; } = null!;
 	public string? Cpf { get; private set; }
 	public string? Phone { get; private set; }
 	public string? Address { get; private set; }
     public ICollection<Sale>? Sales { get; private set; }
 
-    public Client() {}
+    protected Client() {}
 
-    public Client(string name, string cpf, string phone, string address)
+    public Client(string name, string? cpf, string? phone, string? address)
 	{
-		Id = Guid.NewGuid();
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Client name is required.", nameof(name));
+
+        Id = Guid.NewGuid();
 		ClientName = name;
 		Cpf = cpf ?? null;
 		Phone = phone ?? null;

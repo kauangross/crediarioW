@@ -16,14 +16,14 @@ public class ClientResponseDto
 
     public ClientResponseDto(Guid id, 
         string clientName, 
-        string cpf,
-        string phone, 
-        string adress)
+        string? cpf,
+        string? phone, 
+        string? adress)
     {
         Id = id;
         ClientName = clientName;
-        Cpf = cpf;
-        Phone = phone;
-        Address = adress;
+        Cpf = cpf ?? null;
+        Phone = phone ?? null;
+        Address = adress ?? null;
     }
 }

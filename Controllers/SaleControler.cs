@@ -32,9 +32,35 @@ public class SaleController : ControllerBase
 
     // GET /sales/{id}
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    public async Task<IActionResult> GetById([FromQuery] Guid id)
     {
-        Sale sale = await _saleService.GetSaleById(id);
+        Sale sale = await _saleService.GetSaleByIdAsync(id);
         return Ok(sale);
+    }
+
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
+    {
+        IEnumerable<Sale> sales = await _saleService.GetAllSalesAsync();
+        return Ok(sales);
+    }
+
+    [HttpGet("clients/{clientId}")]
+    public async Task<IActionResult> GetSaleByClientIdAsync([FromRoute] Guid clientId) 
+    {
+        var sales = await _saleService.GetSaleByClientIdAsync(clientId);
+        if(sales is null) return NotFound();
+        return Ok(sales);
+    }
+
+    [HttpGet("dates")]
+    public async Task<IActionResult> GetSaleByDateAsync(
+        [FromQuery] DateTime startDate, 
+        [FromQuery] DateTime endDate)
+    {
+        var sales = await _saleService.GetSaleByDateAsync(startDate, endDate);
+
+        if(sales is null) return NotFound();
+        return Ok(sales);
     }
 }

@@ -1,6 +1,8 @@
 ﻿namespace crediarioW.Repository;
 
+using crediarioW.Infrastructure;
 using crediarioW.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 public class SaleRepository
 {
@@ -19,6 +21,22 @@ public class SaleRepository
 
     public async Task<Sale?> GetByIdAsync(Guid id)
     {
+
         return await _context.Sales.FindAsync(id);
+    }
+    public async Task<List<Sale>> GetAllAsync()
+    {
+        return await _context.Sales.ToListAsync();
+    }
+
+    public async Task<List<Sale>> GetSaleByClientIdAsync(Guid id)
+    {
+        return await _context.Sales.Where(sale => sale.ClientId == id).ToListAsync();
+    }
+
+    public async Task<List<Sale>> GetSaleByDateAsync(DateTime startDate, DateTime endDate)
+    {
+        return await _context.Sales.Where(sale => sale.SaleDate >= startDate 
+            && sale.SaleDate <= endDate).ToListAsync();
     }
 }

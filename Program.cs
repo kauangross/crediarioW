@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.EntityFrameworkCore;
 using crediarioW.Repository;
 using crediarioW.Services;
+using crediarioW.Infrastructure;
 
 Console.WriteLine("Servidor iniciando.");
 

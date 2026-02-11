@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using crediarioW.Models.Entities;
 using crediarioW.Dtos;
 using crediarioW.Repository;
+
 public class SaleService
 {
     private readonly SaleRepository _saleRepository;
@@ -39,8 +40,33 @@ public class SaleService
         return sale;
     }
 
-    public async Task<Sale> GetSaleById(Guid id)
+    public async Task<Sale> GetSaleByIdAsync(Guid id)
     {
-        return await _saleRepository.GetByIdAsync(id);
+        Sale? sale = await _saleRepository.GetByIdAsync(id);
+
+        if(sale is null) throw new KeyNotFoundException("Sale not found.");
+        return sale;
+    }
+    public async Task<IEnumerable<Sale>> GetAllSalesAsync()
+    {
+        return await _saleRepository.GetAllAsync();
+    }
+
+    public async Task<IEnumerable<Sale>> GetSaleByClientIdAsync(Guid clientId)
+    {
+        return await _saleRepository.GetSaleByClientIdAsync(clientId);
+    }
+
+    public async Task<IEnumerable<Sale>> GetSaleByDateAsync(DateTime startDate, DateTime endDate)
+    {
+        if(startDate == DateTime.MinValue) 
+            throw new ArgumentNullException("Start date must be informed");
+        
+        if (endDate == DateTime.MinValue) endDate = DateTime.UtcNow;
+
+        if (startDate > endDate) 
+            throw new ArgumentException("Start date must be less than or equal to end date.");
+
+        return await _saleRepository.GetSaleByDateAsync(startDate, endDate);
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace crediarioW.Repository;
 
 using crediarioW.Dtos;
+using crediarioW.Infrastructure;
 using crediarioW.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,15 +35,18 @@ public class ClientRepository
     public async Task<Client> GetByIdAsync(Guid id)
     {
         var client = await _context.Clients.FindAsync(id);
-        if (client == null)
-        {
-            throw new KeyNotFoundException("Client not found.");
-        }
+        if (client == null) throw new KeyNotFoundException("Client not found.");
+       
         return client;
+    }
+
+    public async Task<List<Client>> GetAllAsync()
+    {
+        return await _context.Clients.ToListAsync();
     }
 
     public async Task<bool> ClientExists(Guid id)
     {
-        return await _context.Clients.AnyAsync(c => c.Id == id);
+        return await _context.Clients.AnyAsync(client => client.Id == id);
     }
 }

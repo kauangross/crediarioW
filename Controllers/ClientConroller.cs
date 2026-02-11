@@ -31,4 +31,22 @@ public class ClientController : ControllerBase
         if (result == null) return NotFound();
         return Ok(result);
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    {
+        var result = await _clientService.GetByIdAsync(id);
+
+        if (result == null) return NotFound();
+        return Ok(result);
+    }
+
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
+    {
+        var clientsList = await _clientService.GetAllAsync();
+ 
+        if (clientsList == null) return NotFound();
+        return Ok(clientsList);
+    }
 }

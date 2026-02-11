@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 public class ClientRequestDto
 {
-    [Required]
     [MaxLength(150)]
-    public string ClientName { get; set; }
+    [Required]
+    public required string ClientName { get; set; }
     [MaxLength(11)]
     public string? Cpf { get; set; }
     public string? Phone { get; set; }
