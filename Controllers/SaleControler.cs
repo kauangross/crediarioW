@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using crediarioW.Services;
-using crediarioW.Models.Entities;
-using crediarioW.Dtos;
+﻿namespace crediarioW.Controllers;
 
-namespace crediarioW.Controllers;
+using System;
+using Microsoft.AspNetCore.Mvc;
+using crediarioW.Services;
+using crediarioW.Dtos;
+using crediarioW.Models.Entities;
+
 
 [ApiController]
 [Route("sales")]
@@ -62,5 +64,15 @@ public class SaleController : ControllerBase
 
         if(sales is null) return NotFound();
         return Ok(sales);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteSale([FromRoute] Guid id)
+    {
+        if (id == Guid.Empty) return BadRequest("An sale id must be informed.");
+
+        await _saleService.DeleteSaleAsync(id);
+
+        return Ok("Sale deleted.");
     }
 }

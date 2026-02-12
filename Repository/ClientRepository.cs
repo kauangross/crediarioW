@@ -32,12 +32,9 @@ public class ClientRepository
         return cliente;
     }
 
-    public async Task<Client> GetByIdAsync(Guid id)
-    {
-        var client = await _context.Clients.FindAsync(id);
-        if (client == null) throw new KeyNotFoundException("Client not found.");
-       
-        return client;
+    public async Task<Client?> GetByIdAsync(Guid id)
+    {  
+        return await _context.Clients.FindAsync(id);
     }
 
     public async Task<List<Client>> GetAllAsync()
@@ -48,5 +45,11 @@ public class ClientRepository
     public async Task<bool> ClientExists(Guid id)
     {
         return await _context.Clients.AnyAsync(client => client.Id == id);
+    }
+
+    public async Task DeleteAsync(Client client)
+    {
+        _context.Clients.Remove(client);
+        await _context.SaveChangesAsync();
     }
 }

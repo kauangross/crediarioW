@@ -69,4 +69,13 @@ public class SaleService
 
         return await _saleRepository.GetSaleByDateAsync(startDate, endDate);
     }
+
+    public async Task DeleteSaleAsync(Guid id)
+    {
+        Sale sale = await GetSaleByIdAsync(id);
+
+        if (sale is null) throw new KeyNotFoundException("Sale not found.");
+
+        await _saleRepository.DeleteAsync(sale);
+    }
 }

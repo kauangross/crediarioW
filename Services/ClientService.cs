@@ -3,9 +3,9 @@ namespace crediarioW.Services;
 using crediarioW.Dtos;
 using crediarioW.Models.Entities;
 using crediarioW.Repository;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 
 public class ClientService
@@ -74,9 +74,9 @@ public class ClientService
 
     public async Task<ClientResponseDto?> GetByIdAsync(Guid id)
     {
-        Client? client = await _clientRepository.GetByIdAsync(id);
+        Client client = await _clientRepository.GetByIdAsync(id);
 
-        if (client == null) return null;
+        if (client == null) throw new KeyNotFoundException("Client not found");
         
         return new ClientResponseDto(client.Id,
             client.ClientName,
@@ -96,5 +96,14 @@ public class ClientService
             client.Phone,
             client.Address
         )).ToList();
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var client = await _clientRepository.GetByIdAsync(id);
+
+        if(client is null) throw new KeyNotFoundException("Client not found.");
+        
+        await _clientRepository.DeleteAsync(client);
     }
 }

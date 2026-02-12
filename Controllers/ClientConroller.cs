@@ -49,4 +49,14 @@ public class ClientController : ControllerBase
         if (clientsList == null) return NotFound();
         return Ok(clientsList);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+    {
+        if(id == Guid.Empty) return BadRequest("An client id must be informed");
+
+        await _clientService.DeleteAsync(id);
+
+        return Ok("Client deleted successfully.");
+    }
 }

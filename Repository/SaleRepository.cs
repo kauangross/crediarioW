@@ -39,4 +39,10 @@ public class SaleRepository
         return await _context.Sales.Where(sale => sale.SaleDate >= startDate 
             && sale.SaleDate <= endDate).ToListAsync();
     }
+
+    public async Task DeleteAsync(Sale sale)
+    {
+        _context.Sales.Remove(sale);
+        await _context.SaveChangesAsync();
+    }
 }
