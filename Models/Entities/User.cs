@@ -1,18 +1,22 @@
-﻿namespace crediarioW.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-using System;
+namespace crediarioW.Models.Entities;
 
 public class User
 {
-    public Guid Id { get; }
-    public string Username { get; }
-    public string PasswordHash { get; }
-   
-    public User(string username, string passwordHash)
+    [Required]
+    public Guid Id { get; private set; }
+    public string Email { get; private set; } = null!;
+    public string PasswordHash { get; private set; } = null!;
+    public string Role { get; private set; } = null!;
+
+    protected User() { } // EF
+
+    public User(string email, string passwordHash, string role)
     {
         Id = Guid.NewGuid();
-        Username = username;
+        Email = email;
         PasswordHash = passwordHash;
-
+        Role = role;
     }
 }

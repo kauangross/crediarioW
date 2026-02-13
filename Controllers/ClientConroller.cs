@@ -1,10 +1,10 @@
 ﻿namespace crediarioW.Controllers;
 
-using System;
-using Microsoft.AspNetCore.Mvc;
+using crediarioW.Dtos;
 using crediarioW.Services;
-
-using crediarioW.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 [ApiController]
 [Route("clients")]
@@ -17,31 +17,52 @@ public class ClientController : ControllerBase
         _clientService = clientService;
     }
 
-    // GET /clients/teste
-    [HttpGet("teste")]
-    public IActionResult Teste()
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] ClientRequestDto clientRequestDto)
     {
-        var client = _clientService.CreateClient(
-            Guid.NewGuid(),
-            "Kauan",
-            "03709832039",
-            "51997317533",
-            "Igrejinha"
-        );
+        var result = await _clientService.CreateAsync(clientRequestDto);
+        return Ok(result);
+    }
 
-        var client2 = _clientService.CreateClient( 
-            Guid.NewGuid(),
-            "Rosi",
-            "03709832039",
-            "51997317533",
-            "Taquara"
-        );
+    [Authorize]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] ClientUpdateDto updateRequestDto)
+    {
+        var result = await _clientService.UpdateAsync(id, updateRequestDto);
 
-        List<Client> clients = new();
+        if (result == null) return NotFound();
+        return Ok(result);
+    }
 
-        clients.Add(client);
-        clients.Add(client2);
+    [Authorize]
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    {
+        var result = await _clientService.GetByIdAsync(id);
 
-        return Ok(clients);
+        if (result == null) return NotFound();
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
+    {
+        var clientsList = await _clientService.GetAllAsync();
+ 
+        if (clientsList == null) return NotFound();
+        return Ok(clientsList);
+    }
+
+    [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+    {
+        if(id == Guid.Empty) return BadRequest("An client id must be informed");
+
+        await _clientService.DeleteAsync(id);
+
+        return Ok("Client deleted successfully.");
     }
 }
