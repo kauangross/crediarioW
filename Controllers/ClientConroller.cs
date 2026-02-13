@@ -1,9 +1,10 @@
 ﻿namespace crediarioW.Controllers;
 
-using System;
-using Microsoft.AspNetCore.Mvc;
-using crediarioW.Services;
 using crediarioW.Dtos;
+using crediarioW.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 [ApiController]
 [Route("clients")]
@@ -16,6 +17,7 @@ public class ClientController : ControllerBase
         _clientService = clientService;
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] ClientRequestDto clientRequestDto)
     {
@@ -23,6 +25,7 @@ public class ClientController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] ClientUpdateDto updateRequestDto)
     {
@@ -32,6 +35,7 @@ public class ClientController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
@@ -41,6 +45,7 @@ public class ClientController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpGet("all")]
     public async Task<IActionResult> GetAll()
     {
@@ -50,6 +55,7 @@ public class ClientController : ControllerBase
         return Ok(clientsList);
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {

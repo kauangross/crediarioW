@@ -1,11 +1,11 @@
 ﻿namespace crediarioW.Controllers;
 
-using System;
-using Microsoft.AspNetCore.Mvc;
-using crediarioW.Services;
 using crediarioW.Dtos;
 using crediarioW.Models.Entities;
-
+using crediarioW.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 [ApiController]
 [Route("sales")]
@@ -19,6 +19,7 @@ public class SaleController : ControllerBase
     }
 
     // POST /sales
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateSale([FromBody] SaleRequestDto saleRequestDto)
     {
@@ -33,6 +34,7 @@ public class SaleController : ControllerBase
     }
 
     // GET /sales/{id}
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromQuery] Guid id)
     {
@@ -40,6 +42,7 @@ public class SaleController : ControllerBase
         return Ok(sale);
     }
 
+    [Authorize]
     [HttpGet("all")]
     public async Task<IActionResult> GetAll()
     {
@@ -47,6 +50,7 @@ public class SaleController : ControllerBase
         return Ok(sales);
     }
 
+    [Authorize]
     [HttpGet("clients/{clientId}")]
     public async Task<IActionResult> GetSaleByClientIdAsync([FromRoute] Guid clientId) 
     {
@@ -55,6 +59,7 @@ public class SaleController : ControllerBase
         return Ok(sales);
     }
 
+    [Authorize]
     [HttpGet("dates")]
     public async Task<IActionResult> GetSaleByDateAsync(
         [FromQuery] DateTime startDate, 
@@ -66,6 +71,7 @@ public class SaleController : ControllerBase
         return Ok(sales);
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSale([FromRoute] Guid id)
     {
