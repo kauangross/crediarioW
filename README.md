@@ -58,7 +58,7 @@ To run the project locally:
    ```bash
    cp appsettings.example.json appsettings.json
 
-## 🗄️ Database Setup & Migrations
+### 🗄️ Database Setup & Migrations
 
 This API **does not create a database automatically**.
 The database **must already exist** before running the application.
@@ -68,6 +68,7 @@ When the application starts, Entity Framework Core automatically applies any pen
 context.Database.Migrate();
 ```
 
+### Build and Run
 Commands
 
   ```bash
